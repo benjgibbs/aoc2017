@@ -38,5 +38,4 @@ pub fn run() {
     }
     println!("{}", count);
     println!("{}", count2);
-
 }
