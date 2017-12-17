@@ -1,7 +1,7 @@
 extern crate regex;
 
-mod day6;
+mod day7;
 
 pub fn main() {
-    day6::run();
+    day7::run();
 }
