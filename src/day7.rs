@@ -30,7 +30,7 @@ pub fn run() {
 
         let list: &str = cap.get(3).map_or("", |m| m.as_str());
         let mut these_edges: Vec<String> = Vec::new();
-        for mut end in list.split(", ") {
+        for end in list.split(", ") {
             destination_set.insert(String::from(end));
             these_edges.push(String::from(end));
         }
@@ -46,12 +46,11 @@ pub fn run() {
     calc_weights(root, &edges, &weights);
 }
 
-fn calc_weights(
-    root: &String,
-    edges: &HashMap<String, Vec<String>>,
-    weights: &HashMap<String, i32>,
-) -> i32 {
-    //println!("\n** {}: {:?}",root, weights );
+fn calc_weights(root: &String,
+                edges: &HashMap<String, Vec<String>>,
+                weights: &HashMap<String, i32>)
+                -> i32 {
+    // println!("\n** {}: {:?}",root, weights );
     let mut total_weight: i32 = *weights.get(root).unwrap();
 
     match edges.get(root) {
@@ -72,7 +71,7 @@ fn calc_weights(
                     println!("\t{}: {}", child, weights.get(child).unwrap());
                 }
             }
-        }, 
+        } 
         None => {}
     };
     total_weight
