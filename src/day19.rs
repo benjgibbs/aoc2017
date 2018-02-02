@@ -11,36 +11,50 @@ enum Dir {
     LEFT
 }
 
-fn naviagate(grid : &Vec<&[u8]>, dir: Dir, pos: (i32, i32)) -> bool {
+fn naviagate(grid : &Vec<&[u8]>, dir: Dir, pos: (i32, i32)) -> i32 {
     let (mut x, mut y) = pos;
-    
+    let mut count : i32 = 0;
     loop {
         //println!("Position: ({},{}) Direction: {:?}", x, y, dir);
         if x < 0 || y < 0 || y >= grid.len() as i32 || x > grid[y as usize].len() as i32 {
-            return false
+            return 0
         }
         let c = grid[y as usize][x as usize] as char;
         //println!("Char: {}", c); 
         match  c {
             ' ' => {
-                return false;
+                return count;
             },
             '+' => {
-                if dir != Dir::DOWN && naviagate(grid, Dir::UP, (x, y-1)) {
-                    return true
+                count += 1;
+                if dir != Dir::DOWN {
+                    let c = naviagate(grid, Dir::UP, (x, y-1));
+                    if c != 0 {
+                        return c + count
+                    }
                 }
-                if dir != Dir::LEFT && naviagate(grid, Dir::RIGHT, (x+1, y)) {
-                    return true
+                if dir != Dir::LEFT {
+                    let c = naviagate(grid, Dir::RIGHT, (x+1, y));
+                    if c != 0 {
+                        return c + count
+                    }
                 }
-                if dir != Dir::UP && naviagate(grid, Dir::DOWN, (x, y+1)) {
-                    return true
+                if dir != Dir::UP {
+                    let c = naviagate(grid, Dir::DOWN, (x, y+1));
+                    if c != 0 {
+                        return c + count;
+                    }
+                }  
+                if dir != Dir::RIGHT  {
+                    let c = naviagate(grid, Dir::LEFT, (x-1, y));
+                    if c != 0 {
+                        return c + count;
+                    }
                 }
-                if dir != Dir::RIGHT && naviagate(grid, Dir::LEFT, (x-1, y)) {
-                    return true
-                }
-                return false;
+                return 0;
             },
             c => {
+                count += 1;
                 if !(c== '|' ||  c == '-' ){
                     print!("{}", c);
                 }
@@ -70,6 +84,6 @@ pub fn run() {
         }
     }
     println!("Start: {:?} {:?}", pos, Dir::DOWN);
-    naviagate(&grid, Dir::DOWN, pos);
-    println!();
+    let c = naviagate(&grid, Dir::DOWN, pos);
+    println!("\nSteps: {}", c);
 }
